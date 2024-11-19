@@ -72,17 +72,45 @@ export default function usePaymentCard({
   }, []); // eslint-disable-line
   /** ====== END: META STUFF ====== */
 
+  const revalidateFields = React.useCallback(
+    () => {
+      if (cardNumberField.current && cardNumberField.current.value) {
+        setInputTouched('cardNumber', true);
+      }
+
+      if (expiryDateField.current && expiryDateField.current.value) {
+        setInputTouched('expiryDate', true);
+      }
+
+      if (cvcField.current && cvcField.current.value) {
+        setInputTouched('cvc', true);
+      }
+
+      if (zipField.current && zipField.current.value) {
+        setInputTouched('zip', true);
+      }
+
+      let changeEvent = new Event('change', { bubbles: true });
+      cardNumberField.current && cardNumberField.current.dispatchEvent(changeEvent);
+      expiryDateField.current && expiryDateField.current.dispatchEvent(changeEvent);
+      cvcField.current && cvcField.current.dispatchEvent(changeEvent);
+      zipField.current && zipField.current.dispatchEvent(changeEvent);
+    },
+    [setInputTouched]
+  );
+
   /** ====== START: CARD NUMBER STUFF ====== */
   const handleBlurCardNumber = React.useCallback(
     (props = {}) => {
       return e => {
+        revalidateFields();
         props.onBlur && props.onBlur(e);
         onBlur && onBlur(e);
         setFocused(undefined);
         setInputTouched('cardNumber', true);
       };
     },
-    [onBlur, setInputTouched]
+    [revalidateFields, onBlur, setInputTouched]
   );
 
   const handleChangeCardNumber = React.useCallback(
@@ -172,13 +200,14 @@ export default function usePaymentCard({
   const handleBlurExpiryDate = React.useCallback(
     (props = {}) => {
       return e => {
+        revalidateFields();
         props.onBlur && props.onBlur(e);
         onBlur && onBlur(e);
         setFocused(undefined);
         setInputTouched('expiryDate', true);
       };
     },
-    [onBlur, setInputTouched]
+    [revalidateFields, onBlur, setInputTouched]
   );
 
   const handleChangeExpiryDate = React.useCallback(
@@ -271,13 +300,14 @@ export default function usePaymentCard({
   const handleBlurCVC = React.useCallback(
     (props = {}) => {
       return e => {
+        revalidateFields();
         props.onBlur && props.onBlur(e);
         onBlur && onBlur(e);
         setFocused(undefined);
         setInputTouched('cvc', true);
       };
     },
-    [onBlur, setInputTouched]
+    [revalidateFields, onBlur, setInputTouched]
   );
 
   const handleChangeCVC = React.useCallback(
@@ -366,13 +396,14 @@ export default function usePaymentCard({
   const handleBlurZIP = React.useCallback(
     (props = {}) => {
       return e => {
+        revalidateFields();
         props.onBlur && props.onBlur(e);
         onBlur && onBlur(e);
         setFocused(undefined);
         setInputTouched('zip', true);
       };
     },
-    [onBlur, setInputTouched]
+    [revalidateFields, onBlur, setInputTouched]
   );
 
   const handleChangeZIP = React.useCallback(
